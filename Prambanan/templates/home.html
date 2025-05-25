@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomenmender System</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap'); 
+    body, ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Montserrat';
+        background-color: #0a0a0a;
+        color: white;
+        background-image: url("{{ url_for('static', filename='bb2.png') }}");
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        line-height: 1.6;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 50px;
+        background-color: transparent;
+    }
+
+    .logo {
+        font-family: 'Montserrat';
+        font-size: 28px;
+        font-weight: bold;
+        color: #1f0f69;
+    }
+
+    .logo span {
+        color: whitesmoke;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 100px;
+    }
+
+    nav ul li a {
+        color: whitesmoke;
+        text-decoration: none;
+        font-size: 22px;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+
+    nav ul li a.active {
+        color: whitesmoke; 
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    nav ul li a .nav-icon {
+    margin-left: 5px;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    }
+
+    nav ul li a:hover {
+        color: #1f0f69;
+    }
+
+    .hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 100px 50px;
+        border-radius: 10px;
+        margin: 20px 50px;
+    }
+
+    .content h1 {
+        font-size: 44px;
+        line-height: 1.2;
+        color: #1f0f69;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    .content p {
+        font-size: 22px;
+        margin-top: 0px;
+        margin-bottom: 5px;
+        color: #1f0f69;
+    }
+
+    .cta-buttons {
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+
+    .cta-buttons li {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .cta-buttons a {
+        display: inline-block;
+        padding: 15px 30px;
+        border-radius: 30px;
+        font-size: 16px;
+        text-decoration: none;
+        transition: background 0.3s;
+        background: linear-gradient(90deg, #1f0f69, #ffffff);
+        color: white;
+    }
+
+    .cta-buttons a:hover {
+        background: linear-gradient(90deg, #ffffff, #1f0f69);
+    }
+
+    .hero-image img {
+        max-width: 405px;
+        border-radius: 0px;
+        transform: translateX(50px);
+    }
+</style>
+<body>
+    <header>
+        <div class="logo">AIREKA</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}" class="active">About<span class="nav-icon"></span></a></li>
+                <li><a href="{{ url_for('extractor') }}">Extractor</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Content for the homepage or respective page -->
+    <main>
+        <section class="hero">
+            <div class="content">
+                <h1>Swipe Right for</h1>
+                <h1>Your Perfect Insurance!</h1>
+                <p>Analyzes your needs and lifestyle to recommend</p>
+                <p>insurance products that actually fit you</p>
+                <div class="cta-buttons">
+                    <li><a href="{{ url_for('extractor') }}"><strong>Start Your Search</strong></a></li>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="{{ url_for('static', filename='Artboard.png') }}">
+            </div>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Insurance Recommendation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap'); 
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      font-family: 'Montserrat';
+      background-image: url("{{ url_for('static', filename='bb3.png') }}");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      color: #4d4b69;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.8;
+      z-index: -2;
+    }
+    body::before {
+      width: 400px;
+      height: 400px;
+      background: #7a57b7;
+      top: 20%;
+      left: 10%;
+    }
+    body::after {
+      width: 600px;
+      height: 600px;
+      background: #f24858;
+      bottom: 5%;
+      right: 15%;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 50px;
+      font-weight: 700;
+      font-size: 20px;
+      font-family: 'Montserrat';
+      color: #2f2b49;
+    }
+    header .logo {
+      font-weight: 900;
+      font-size: 28px;
+      letter-spacing: 0.05em;
+      user-select: none;
+    }
+    header nav {
+      display: flex;
+      color: whitesmoke;
+      gap: 30px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    header nav ul {
+        list-style: none;
+        display: flex;
+        gap: 100px;
+    }
+
+    header nav ul li a {
+        color: whitesmoke;
+        text-decoration: none;
+        font-size: 22px;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+
+    header nav ul li a .nav-icon {
+    margin-left: 5px;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    }
+
+    header nav ul li a:hover {
+        color: #1f0f69;
+    }
+    main {
+      flex: 1;
+      padding: 0 50px 50px 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+      align-items: center;
+    }
+    .input-container, .result-container {
+      width: 400px;
+      background: rgba(128, 105, 178, 0.4);
+      backdrop-filter: blur(20px);
+      border-radius: 15px;
+      padding: 30px 40px;
+      box-shadow: 0 0 15px rgba(128, 105, 178, 0.3);
+      color: white;
+    }
+    .input-container h2,
+    .result-container h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      user-select: none;
+    }
+    .input-container input[type="text"] {
+      width: 100%;
+      height: 40px;
+      border-radius: 15px;
+      border: none;
+      outline: none;
+      padding-left: 15px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6c5b95;
+      background: rgba(255 255 255 / 0.25);
+      user-select: text;
+      transition: background 0.3s ease;
+    }
+    .input-container input[type="text"]::placeholder {
+      color: #6c5b95;
+      font-weight: 500;
+    }
+    .input-container input[type="text"]:focus {
+      background: rgba(255 255 255 / 0.4);
+    }
+    .input-container button {
+      margin-top: 20px;
+      width: 100%;
+      height: 40px;
+      border-radius: 15px;
+      border: none;
+      background-color: #6c5b95;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .input-container button:hover {
+      background-color: #5a4b7c;
+    }
+    .result-container .customer-id {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 15px;
+      user-select: none;
+    }
+    .result-container .recommendation-label {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 30px;
+      user-select: none;
+    }
+    .recommendation-list {
+      display: flex;
+      justify-content: space-between;
+    }
+    .recommendation-list .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+      color: #4d4b69;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: default;
+    }
+    .recommendation-list .item .circle {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: rgba(204, 204, 204, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      font-size: 20px;
+      color: #4d4b69;
+      margin-bottom: 8px;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">AIREKA</div>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}" class="active">About<span class="nav-icon"></span></a></li>
+            <li><a href="{{ url_for('extractor') }}">Extractor</a></li>
+        </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="input-container">
+      <h2>Find Your Insurance Recommendation</h2>
+      <form id="insuranceForm" method="POST" action="#" onsubmit="return showResult(event)">
+        <input type="text" id="customerID" name="customerID" placeholder="Type your Customer ID and discover your match" required />
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <section class="result-container" id="resultSection" style="display:none;">
+      <div class="customer-id" id="displayCustomerID"></div>
+      <div class="recommendation-label">Insurance Recommendation</div>
+      <div class="recommendation-list" id="recommendationList">
+        <!-- Recommendations will be inserted here -->
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Contoh rekomendasi default per Customer ID (bisa dikembangkan sesuai kebutuhan)
+    const recommendationsData = {
+      "1243163": ["Auto", "Travel", "Life", "House", "Auto"],
+      "1000001": ["Life", "Health", "Travel", "Auto", "Home"],
+      "2000002": ["House", "Auto", "Travel", "Life", "Health"]
+      // Bisa tambah data disini
+    };
+
+    function showResult(event) {
+      event.preventDefault(); // cegah form submit reload halaman
+
+      const customerID = document.getElementById('customerID').value.trim();
+      if (!customerID) return false;
+
+      // Tampilkan customer ID
+      const displayID = document.getElementById('displayCustomerID');
+      displayID.textContent = `Customer ID : ${customerID}`;
+
+      // Ambil rekomendasi sesuai ID, default kalau tidak ada data
+      const recs = recommendationsData[customerID] || ["Auto", "Travel", "Life", "House", "Auto"];
+
+      // Render rekomendasi
+      const recList = document.getElementById('recommendationList');
+      recList.innerHTML = ''; // kosongkan dulu
+
+      recs.forEach((rec, idx) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('item');
+
+        const circleDiv = document.createElement('div');
+        circleDiv.classList.add('circle');
+        circleDiv.textContent = idx + 1;
+
+        itemDiv.appendChild(circleDiv);
+        itemDiv.appendChild(document.createTextNode(rec));
+        recList.appendChild(itemDiv);
+      });
+
+      // Tampilkan section hasil
+      document.getElementById('resultSection').style.display = 'block';
+
+      return false; // prevent form submit sebenarnya sudah ada event.preventDefault()
+    }
+  </script>
+</body>
+</html>
